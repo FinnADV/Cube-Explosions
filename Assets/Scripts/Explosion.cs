@@ -2,20 +2,27 @@ using UnityEngine;
 
 public class Explosion : MonoBehaviour
 {
-    [SerializeField] private float _radius;
-    [SerializeField] private float _force;
+    [SerializeField] private float _explosionRadius = 10f;
+    [SerializeField] private float _explosionForce = 700f;
+    [SerializeField] private float _upwardsModifier = 3f;
 
     public void Explode()
     {
-        Collider[] overlappedCollider = Physics.OverlapSphere(transform.position, _radius);
+        Collider[] overlappedColliders = Physics.OverlapSphere(transform.position, _explosionRadius);
 
-        for (int i = 0; i < overlappedCollider.Length; i++)
+        foreach (Collider hitCollider in overlappedColliders)
         {
-            Rigidbody rigidbody = overlappedCollider[i].attachedRigidbody;
+            Rigidbody attachedRigidbody = hitCollider.attachedRigidbody;
 
-            if (rigidbody != null)
+            if (attachedRigidbody != null && attachedRigidbody.isKinematic == false)
             {
-                rigidbody.AddExplosionForce(_force, transform.position, _radius);
+                attachedRigidbody.AddExplosionForce(
+                    _explosionForce,
+                    transform.position,
+                    _explosionRadius,
+                    _upwardsModifier,
+                    ForceMode.Impulse
+                );
             }
         }
     }

@@ -3,11 +3,15 @@
 public class InvisibleBounds : MonoBehaviour
 {
     [SerializeField] private Vector3 _size = new Vector3(10f, 5f, 10f);
+
     [SerializeField] private float _thickness = 0.5f;
+
     [SerializeField] private bool _clickThroughWalls = true;
 
     private const float _bounciness = 0.5f;
+
     private const string _wallMaterialName = "WallMaterial";
+    private const string _ignoreRaycastLayer = "Ignore Raycast";
 
     private void Start()
     {
@@ -22,6 +26,7 @@ public class InvisibleBounds : MonoBehaviour
         }
 
         PhysicsMaterial wallMaterial = new PhysicsMaterial(_wallMaterialName);
+
         wallMaterial.bounciness = _bounciness;
 
         float halfHeight = _size.y / 2f;
@@ -39,12 +44,13 @@ public class InvisibleBounds : MonoBehaviour
     private void CreateWall(string wallName, Vector3 localPosition, Vector3 wallScale, PhysicsMaterial wallMaterial)
     {
         GameObject wallObject = new GameObject(wallName);
+
         wallObject.transform.parent = transform;
         wallObject.transform.localPosition = localPosition;
 
         if (_clickThroughWalls)
         {
-            wallObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+            wallObject.layer = LayerMask.NameToLayer(_ignoreRaycastLayer);
         }
 
         BoxCollider boxCollider = wallObject.AddComponent<BoxCollider>();
@@ -63,7 +69,6 @@ public class InvisibleBounds : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
-
         Gizmos.DrawWireCube(transform.position, _size);
     }
 }
