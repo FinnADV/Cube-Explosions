@@ -4,20 +4,8 @@ using UnityEngine.InputSystem;
 public class CubeClickHandler : MonoBehaviour
 {
     [SerializeField] private LayerMask _cubeLayer;
-
     [SerializeField] private CubeSpawner _cubeSpawner;
-
-    private Camera _mainCamera;
-
-    private void Start()
-    {
-        _mainCamera = Camera.main;
-
-        if (_cubeSpawner == null)
-        {
-            _cubeSpawner = FindAnyObjectByType<CubeSpawner>();
-        }
-    }
+    [SerializeField] private Camera _mainCamera;
 
     private void Update()
     {
@@ -27,9 +15,7 @@ public class CubeClickHandler : MonoBehaviour
 
             if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, _cubeLayer))
             {
-                CubeData cubeData = hit.transform.GetComponent<CubeData>();
-
-                if (cubeData != null)
+                if (hit.collider.TryGetComponent(out CubeData cubeData))
                 {
                     HandleCubeClick(cubeData, hit.transform.gameObject);
                 }
@@ -45,6 +31,12 @@ public class CubeClickHandler : MonoBehaviour
         {
             _cubeSpawner.SpawnCubes(cubeObject, cubeData.SplitChance, cubeData.SplitLevel);
 
+            Physics.SyncTransforms();
+        }
+
+        if (cubeObject.TryGetComponent(out Explosion explosion))
+        {
+            explosion.Explode();
         }
 
         Destroy(cubeObject);

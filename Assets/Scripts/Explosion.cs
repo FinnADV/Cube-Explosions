@@ -3,8 +3,8 @@ using UnityEngine;
 public class Explosion : MonoBehaviour
 {
     [SerializeField] private float _explosionRadius = 10f;
-    [SerializeField] private float _explosionForce = 700f;
-    [SerializeField] private float _upwardsModifier = 3f;
+    [SerializeField] private float _explosionForce = 5f;
+    [SerializeField] private float _upwardsModifier = 0.5f;
 
     public void Explode()
     {

@@ -4,12 +4,11 @@ public class CubeSpawner : MonoBehaviour
 {
     [SerializeField] private GameObject _cubePrefab;
 
-    [SerializeField] private float _spawnRange = 5f;
-    [SerializeField] private float _spawnHeight = 0.5f;
-
     [SerializeField] private int _maxCube = 5;
     [SerializeField] private int _minCube = 2;
     [SerializeField] private int _scaleReduced = 2;
+
+     private Painting _painter = new Painting();
 
     public void SpawnCubes(GameObject originalCube, double currentChance, int currentLevel)
     {
@@ -20,11 +19,7 @@ public class CubeSpawner : MonoBehaviour
 
         for (int i = 0; i < numberOfCubes; i++)
         {
-            Vector3 randomPosition = new Vector3(
-                originalPosition.x + Random.Range(-_spawnRange, _spawnRange),
-                originalPosition.y + _spawnHeight,
-                originalPosition.z + Random.Range(-_spawnRange, _spawnRange)
-            );
+            Vector3 randomPosition = originalPosition;
 
             GameObject newCube = Instantiate(_cubePrefab, randomPosition, Quaternion.identity);
 
@@ -44,12 +39,7 @@ public class CubeSpawner : MonoBehaviour
                 Debug.Log($"Создан куб уровня {newLevel} с шансом {newChance}");
             }
 
-            Renderer renderer = newCube.GetComponent<Renderer>();
-
-            if (renderer != null)
-            {
-                renderer.material.color = new Color(Random.value, Random.value, Random.value);
-            }
+            _painter.SetRandomColor(newCube);
         }
     }
 }

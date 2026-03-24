@@ -3,9 +3,7 @@
 public class InvisibleBounds : MonoBehaviour
 {
     [SerializeField] private Vector3 _size = new Vector3(10f, 5f, 10f);
-
     [SerializeField] private float _thickness = 0.5f;
-
     [SerializeField] private bool _clickThroughWalls = true;
 
     private const float _bounciness = 0.5f;
@@ -14,11 +12,6 @@ public class InvisibleBounds : MonoBehaviour
     private const string _ignoreRaycastLayer = "Ignore Raycast";
 
     private void Start()
-    {
-        CreateBox();
-    }
-
-    private void CreateBox()
     {
         for (int i = transform.childCount - 1; i >= 0; i--)
         {
